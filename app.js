@@ -73,6 +73,9 @@
     if (!img || img.tagName !== "IMG") return;
     const box = img.closest(".thumb[data-id]");
     if (!box) return;
+    // Bản web tĩnh: ảnh tải lẻ lên thư mục gốc thay vì img/ thì thử đường dẫn phẳng một lần trước khi bỏ cuộc.
+    const flat = (img.getAttribute("src") || "").match(/^img\/(.+)$/);
+    if (flat && !img.dataset.retried) { img.dataset.retried = "1"; img.src = flat[1]; return; }
     const it = [...items, ...adm.list].find((x) => x.id === box.dataset.id);
     if (it) box.outerHTML = fallbackThumb({ ...it, img: null });
   }, true);
